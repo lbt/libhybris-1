@@ -352,12 +352,19 @@ Requires: %{name}-libvibrator = %{version}-%{release}
 %build
 cd hybris
 autoreconf -v -f -i
+
+# generic arch support
+if [[ %arch =~ "arm" ]] ; then
+    ARCH=arm
+else
+    ARCH=x86
+fi
 %configure \
   --enable-wayland \
   %{!?qa_stage_devel:--enable-debug} \
   %{!?qa_stage_devel:--enable-trace} \
   --with-android-headers=/usr/lib/droid-devel/droid-headers \
-  --enable-arch=arm \
+  --enable-arch=$ARCH \
   --with-default-hybris-ld-library-path=/usr/libexec/droid-hybris/system/lib:/vendor/lib:/system/lib
 
 make
